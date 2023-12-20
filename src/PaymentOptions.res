@@ -104,99 +104,103 @@ let make = (
     <span className={`scale-90 animate-slowShow ${toggleIconElement ? "hidden" : ""}`}> ele </span>
   }
   <div className="w-full">
-    <div
-      ref={payOptionsRef->ReactDOM.Ref.domRef}
-      className="flex flex-row overflow-auto no-scrollbar"
-      style={ReactDOMStyle.make(
-        ~columnGap=themeObj.spacingTab,
-        ~marginBottom=themeObj.spacingGridColumn,
-        ~paddingBottom="7px",
-        ~padding="4px",
-        ~height="auto",
-        (),
-      )}>
-      {cardOptionDetails
-      ->Js.Array2.mapi((payOption, i) => {
-        let isActive = payOption.paymentMethodName == selectedOption
-        <TabCard key={i->Belt.Int.toString} paymentOption=payOption isActive />
-      })
-      ->React.array}
-      <TabLoader cardShimmerCount />
-      <RenderIf condition={dropDownOptionsDetails->Js.Array2.length > 0}>
-        <div className="flex relative h-auto justify-center">
-          <div className="flex flex-col items-center absolute mt-3 pointer-events-none gap-y-1.5">
-            {switch dropDownOptionsDetails->Belt.Array.get(moreIconIndex) {
-            | Some(paymentFieldsInfo) =>
-              switch paymentFieldsInfo.miniIcon {
-              | Some(ele) => displayIcon(ele)
-              | None =>
-                switch paymentFieldsInfo.icon {
+    <AddDataAttributes attributes=[("data-testid", TestUtils.paymentMethodListTestId)]>
+      <div
+        ref={payOptionsRef->ReactDOM.Ref.domRef}
+        className="flex flex-row overflow-auto no-scrollbar"
+        style={ReactDOMStyle.make(
+          ~columnGap=themeObj.spacingTab,
+          ~marginBottom=themeObj.spacingGridColumn,
+          ~paddingBottom="7px",
+          ~padding="4px",
+          ~height="auto",
+          (),
+        )}>
+        {cardOptionDetails
+        ->Js.Array2.mapi((payOption, i) => {
+          let isActive = payOption.paymentMethodName == selectedOption
+          <TabCard key={i->Belt.Int.toString} paymentOption=payOption isActive />
+        })
+        ->React.array}
+        <TabLoader cardShimmerCount />
+        <RenderIf condition={dropDownOptionsDetails->Js.Array2.length > 0}>
+          <div className="flex relative h-auto justify-center">
+            <div className="flex flex-col items-center absolute mt-3 pointer-events-none gap-y-1.5">
+              {switch dropDownOptionsDetails->Belt.Array.get(moreIconIndex) {
+              | Some(paymentFieldsInfo) =>
+                switch paymentFieldsInfo.miniIcon {
                 | Some(ele) => displayIcon(ele)
-                | None => React.null
+                | None =>
+                  switch paymentFieldsInfo.icon {
+                  | Some(ele) => displayIcon(ele)
+                  | None => React.null
+                  }
                 }
-              }
-            | None => React.null
-            }}
-            <Icon size=10 name="arrow-down" />
+              | None => React.null
+              }}
+              <Icon size=10 name="arrow-down" />
+            </div>
+            <AddDataAttributes attributes=[("data-testid", TestUtils.paymentMethodDropDownTestId)]>
+              <select
+                value=selectedPaymentOption.paymentMethodName
+                ref={selectRef->ReactDOM.Ref.domRef}
+                className={`TabMore place-items-start outline-none`}
+                onChange=handleChange
+                disabled=readOnly
+                style={ReactDOMStyle.make(
+                  ~width="40px",
+                  ~paddingLeft=themeObj.spacingUnit,
+                  ~background=themeObj.colorBackground,
+                  ~cursor="pointer",
+                  ~height="inherit",
+                  ~borderRadius=themeObj.borderRadius,
+                  ~appearance="none",
+                  ~color="transparent",
+                  (),
+                )}>
+                <option value=selectedPaymentOption.paymentMethodName disabled={true}>
+                  {React.string(
+                    selectedPaymentOption.displayName === "Card"
+                      ? localeString.card
+                      : {
+                          let (name, _) = PaymentUtils.getDisplayNameAndIcon(
+                            customMethodNames,
+                            selectedPaymentOption.paymentMethodName,
+                            selectedPaymentOption.displayName,
+                            selectedPaymentOption.icon,
+                          )
+                          name
+                        },
+                  )}
+                </option>
+                {dropDownOptionsDetails
+                ->Js.Array2.mapi((item, i) => {
+                  <option
+                    key={string_of_int(i)}
+                    value=item.paymentMethodName
+                    style={ReactDOMStyle.make(~color=themeObj.colorPrimary, ())}>
+                    {React.string(
+                      item.displayName === "card"
+                        ? localeString.card
+                        : {
+                            let (name, _) = PaymentUtils.getDisplayNameAndIcon(
+                              customMethodNames,
+                              item.paymentMethodName,
+                              item.displayName,
+                              item.icon,
+                            )
+                            name
+                          },
+                    )}
+                  </option>
+                })
+                ->React.array}
+              </select>
+            </AddDataAttributes>
           </div>
-          <select
-            value=selectedPaymentOption.paymentMethodName
-            ref={selectRef->ReactDOM.Ref.domRef}
-            className={`TabMore place-items-start outline-none`}
-            onChange=handleChange
-            disabled=readOnly
-            style={ReactDOMStyle.make(
-              ~width="40px",
-              ~paddingLeft=themeObj.spacingUnit,
-              ~background=themeObj.colorBackground,
-              ~cursor="pointer",
-              ~height="inherit",
-              ~borderRadius=themeObj.borderRadius,
-              ~appearance="none",
-              ~color="transparent",
-              (),
-            )}>
-            <option value=selectedPaymentOption.paymentMethodName disabled={true}>
-              {React.string(
-                selectedPaymentOption.displayName === "Card"
-                  ? localeString.card
-                  : {
-                      let (name, _) = PaymentUtils.getDisplayNameAndIcon(
-                        customMethodNames,
-                        selectedPaymentOption.paymentMethodName,
-                        selectedPaymentOption.displayName,
-                        selectedPaymentOption.icon,
-                      )
-                      name
-                    },
-              )}
-            </option>
-            {dropDownOptionsDetails
-            ->Js.Array2.mapi((item, i) => {
-              <option
-                key={string_of_int(i)}
-                value=item.paymentMethodName
-                style={ReactDOMStyle.make(~color=themeObj.colorPrimary, ())}>
-                {React.string(
-                  item.displayName === "card"
-                    ? localeString.card
-                    : {
-                        let (name, _) = PaymentUtils.getDisplayNameAndIcon(
-                          customMethodNames,
-                          item.paymentMethodName,
-                          item.displayName,
-                          item.icon,
-                        )
-                        name
-                      },
-                )}
-              </option>
-            })
-            ->React.array}
-          </select>
-        </div>
-      </RenderIf>
-    </div>
+        </RenderIf>
+      </div>
+    </AddDataAttributes>
     {checkoutEle}
   </div>
 }

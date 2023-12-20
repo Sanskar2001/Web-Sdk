@@ -51,7 +51,7 @@ let make = (~paymentType, ~customFieldName=None) => {
       onChange=changeName
       paymentType
       type_="text"
-      name="name"
+      name=TestUtils.cardHolderNameInputTestId
       inputRef=nameRef
       placeholder
     />

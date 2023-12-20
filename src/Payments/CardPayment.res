@@ -285,6 +285,7 @@ let make = (
             maxLength=maxCardLength
             pattern="[\d| ]{16,22}"
             inputRef=cardRef
+            name=TestUtils.cardNoInputTestId
             placeholder="1234 1234 1234 1234"
           />
           <div
@@ -308,6 +309,7 @@ let make = (
                 appearance=config.appearance
                 maxLength=7
                 inputRef=expiryRef
+                name=TestUtils.expiryInputTestId
                 placeholder="MM / YY"
               />
             </div>
@@ -330,6 +332,7 @@ let make = (
                   type_="tel"
                   className="tracking-widest w-full"
                   maxLength=4
+                  name=TestUtils.cardCVVInputTestId
                   inputRef=cvcRef
                   placeholder="123"
                 />

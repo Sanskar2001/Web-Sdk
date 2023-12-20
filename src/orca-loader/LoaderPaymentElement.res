@@ -311,7 +311,7 @@ let make = (componentType, options, setIframeRef, iframeRef, mountPostMessage) =
           src="${ApiEndpoint.sdkDomainUrl}/index.html?componentName=${componentType}"
           allow="payment *"
           name="orca-payment"
-          style="border: 0px; ${additionalIframeStyle}"
+          style=" border: 0px; ${additionalIframeStyle} ;"
           width="100%"
         ></iframe>
         </div>`

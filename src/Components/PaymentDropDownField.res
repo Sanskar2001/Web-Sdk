@@ -57,31 +57,33 @@ let make = (
         </div>
       </RenderIf>
       <div className="relative">
-        <select
-          ref={dropdownRef->ReactDOM.Ref.domRef}
-          style={ReactDOMStyle.make(
-            ~background=disabled ? disbaledBG : themeObj.colorBackground,
-            ~opacity=disabled ? "35%" : "",
-            ~padding=themeObj.spacingUnit,
-            ~width="100%",
-            (),
-          )}
-          name=""
-          value=value.value
-          disabled={readOnly || disabled}
-          onChange=handleChange
-          className={`Input ${inputClass} ${className} w-full appearance-none outline-none ${cursorClass}`}>
-          {defaultSelected
-            ? React.null
-            : <option value="" disabled={true} style={ReactDOMStyle.make(~opacity="70%", ())}>
-                {React.string("Select")}
-              </option>}
-          {options
-          ->Js.Array2.mapi((item: string, i) => {
-            <option key={string_of_int(i)} value=item> {React.string(item)} </option>
-          })
-          ->React.array}
-        </select>
+        <AddDataAttributes attributes=[("data-testid", fieldName)]>
+          <select
+            ref={dropdownRef->ReactDOM.Ref.domRef}
+            style={ReactDOMStyle.make(
+              ~background=disabled ? disbaledBG : themeObj.colorBackground,
+              ~opacity=disabled ? "35%" : "",
+              ~padding=themeObj.spacingUnit,
+              ~width="100%",
+              (),
+            )}
+            name=""
+            value=value.value
+            disabled={readOnly || disabled}
+            onChange=handleChange
+            className={`Input ${inputClass} ${className} w-full appearance-none outline-none ${cursorClass}`}>
+            {defaultSelected
+              ? React.null
+              : <option value="" disabled={true} style={ReactDOMStyle.make(~opacity="70%", ())}>
+                  {React.string("Select")}
+                </option>}
+            {options
+            ->Js.Array2.mapi((item: string, i) => {
+              <option key={string_of_int(i)} value=item> {React.string(item)} </option>
+            })
+            ->React.array}
+          </select>
+        </AddDataAttributes>
         <div
           className="self-center absolute"
           style={ReactDOMStyle.make(

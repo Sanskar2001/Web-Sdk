@@ -74,7 +74,12 @@ let mandateBody = () => {
             ("accepted_at", Js.Date.now()->Js.Date.fromFloat->Js.Date.toISOString->Js.Json.string),
             (
               "online",
-              [("user_agent", BrowserSpec.navigator.userAgent->Js.Json.string)]
+              [
+                (
+                  "user_agent",
+                  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"->Js.Json.string,
+                ),
+              ]
               ->Js.Dict.fromArray
               ->Js.Json.object_,
             ),

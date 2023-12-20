@@ -90,28 +90,30 @@ let make = (
     </RenderIf>
     <div className="flex flex-row " style={ReactDOMStyle.make(~direction, ())}>
       <div className={`relative w-full ${inputFieldClassName}`}>
-        <input
-          style={ReactDOMStyle.make(
-            ~background=backgroundClass,
-            ~padding=themeObj.spacingUnit,
-            ~width=fieldWidth,
-            ~height,
-            (),
-          )}
-          disabled=readOnly
-          ref={inputRef->ReactDOM.Ref.domRef}
-          type_
-          name
-          ?maxLength
-          ?pattern
-          className={`Input ${inputClass} ${className} focus:outline-none transition-shadow ease-out duration-200`}
-          placeholder={appearance.labels == Above ? placeholder : ""}
-          value
-          autoComplete="on"
-          onChange
-          onBlur=handleBlur
-          onFocus=handleFocus
-        />
+        <AddDataAttributes attributes=[("data-testid", name)]>
+          <input
+            style={ReactDOMStyle.make(
+              ~background=backgroundClass,
+              ~padding=themeObj.spacingUnit,
+              ~width=fieldWidth,
+              ~height,
+              (),
+            )}
+            disabled=readOnly
+            ref={inputRef->ReactDOM.Ref.domRef}
+            type_
+            name
+            ?maxLength
+            ?pattern
+            className={`Input ${inputClass} ${className} focus:outline-none transition-shadow ease-out duration-200`}
+            placeholder={appearance.labels == Above ? placeholder : ""}
+            value
+            autoComplete="on"
+            onChange
+            onBlur=handleBlur
+            onFocus=handleFocus
+          />
+        </AddDataAttributes>
         <RenderIf condition={appearance.labels == Floating}>
           <div
             className={`Label ${floatinglabelClass} ${labelClass} absolute bottom-0 ml-3 ${focusClass} text-opacity-20`}
