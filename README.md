@@ -101,33 +101,64 @@ First install all the node modules by running the following command
 npm install
 ```
 
-Replace the placeholders in /Hyperswitch-react-demo-app/.env publishable key and secret key
-
-```
-HYPERSWITCH_PUBLISHABLE_KEY=<GET_THIS_FROM_DASHBOARD>
-HYPERSWITCH_SECRET_KEY=<GET_THIS_FROM_DASHBOARD>
-```
-
-In the package json file you can see the various scripts you can run.
-To start compiling the Rescript code, run the following command. Whenever there is a change in the Rescript code, the compiler will build its adjacent JS code which will be consumed.
+Once the installation is successful, you can run the app with the following command -
 
 ```bash
-npm run re:start
+npm run start:dev
 ```
 
-Start the webpack development server by running this command. This will trigger webpack to build a `dist` folder which will contain all the assets and serve it to port localhost:9050 (which you can change from within `webpack.common.js`)
+This will trigger a build of the project. On a successful build, you should see a message `Compiled successfully` in your terminal.
 
-```bash
-npm run start
-```
-
-You will now get the url http://localhost:9050/HyperLoader.js, which is the script tag.
-
-To see your Web Client functioning you can run the command below, this will open up a playground in which your immediate changes should reflect as you proceed with your development.
+Now you can proceed with launching the playground. The playground is a demo app where you can test your payments. In a separate terminal, run the following command to start the app on your local machine.
 
 ```bash
 npm run start:playground
 ```
+
+This step will prompt you to enter 2 details -
+
+- <strong>Publishable Key</strong> - This is a public key that resides on your client side for authentication
+- <strong>Secret Key</strong> - This is the API key which should only be restricted to your app server
+
+### About Env Configs
+
+For ease of development and deployment there are configs in /Hyperswitch-react-demo-app/.env
+
+- `HYPERSWITCH_PUBLISHABLE_KEY` - Publishable key of your Hyperswitch Account
+- `HYPERSWITCH_SECRET_KEY` - Api key of your Hyperswitch Account
+- `HYPERSWITCH_SERVER_URL` - URL of your hosted Hyperswitch Backend server
+- `HYPERSWITCH_CLIENT_URL` - URL of your hosted Hyperswitch SDK
+- `SELF_SERVER_URL` - URL of your node server (/Hyperswitch-react-demo-app/server.js)
+
+### Logging
+
+Logging from the payment checkout web client is crucial for tracking and monitoring the flow of payments. It provides a transparent record of events, errors, and user interactions, aiding developers and support teams in identifying issues, debugging, and ensuring the security and reliability of payment processes. Well-implemented logging enhances traceability and facilitates a more efficient resolution of potential problems in the payment checkout experience.
+
+Logs are sent to the server via non-blocking Beacon API requests. This means that even if the logging endpoint configured is incorrect, it would not affect the core payment functionalities. You can find more about the structure of logging request payload in the `beaconApiCall` function in the [`OrcaLogger.res`](./src/orca-log-catcher/OrcaLogger.res#L423C7-L423C20) file.
+
+If you want to collect logs, you can do so by setting up an endpoint on your server to receive, process and persist logs.
+
+In the [`webpack.common.js`](./webpack.common.js) file, you would have to enable the logging flag, and configure the logging endpoint and log level.
+
+```javascipt
+let logEndpoint =
+  sdkEnv === "prod"
+    ? "<YOUR_PRODUCTION_LOGGING_ENDPOINT>"
+    : "<YOUR_SANDBOX_LOGGING_ENDPOINT>";
+
+// Set this to true to enable logging
+let enableLogging = true;
+
+// Choose from DEBUG, INFO, WARNING, ERROR, SILENT
+let loggingLevel = "DEBUG";
+```
+
+<br>
+<div style="display: flex; align-items: center; flex-direction: column;">
+  <img src="./docs/imgs/logging_levels.png" />
+  <i>Understanding Logging Levels</i>
+</div>
+<br>
 
 Now let's test the integration by making a payment from your web client!
 
@@ -152,7 +183,6 @@ Try the steps below to get a feel of how quick the setup is:
 
 Modify the `HYPERSWITCH_SERVER_URL` key in `.env file` by adding the BE hosted url
 
-
 <a href="#FAQs">
   <h2 id="FAQs">🤔 FAQs</h2>
 </a>
@@ -161,6 +191,16 @@ Got more questions?
 Please refer to our [FAQs page][faqs].
 
 [faqs]: https://hyperswitch.io/docs/devSupport
+
+### External Services
+
+- Braintree
+- Trustpay
+- Sentry
+- ApplePay
+- GooglePay
+- Klarna
+- Kount
 
 <!--
 ## Documentation

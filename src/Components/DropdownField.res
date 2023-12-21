@@ -9,9 +9,16 @@ let make = (
   ~disabled=false,
   ~className="",
 ) => {
-  let {themeObj, localeString} = Recoil.useRecoilValueFromAtom(configAtom)
+  let {themeObj, localeString, config} = Recoil.useRecoilValueFromAtom(configAtom)
   let {readOnly} = Recoil.useRecoilValueFromAtom(optionAtom)
   let dropdownRef = React.useRef(Js.Nullable.null)
+  let (inputFocused, setInputFocused) = React.useState(_ => false)
+  let {parentURL} = Recoil.useRecoilValueFromAtom(keys)
+
+  let handleFocus = _ => {
+    setInputFocused(_ => true)
+    Utils.handleOnFocusPostMessage(~targetOrigin=parentURL, ())
+  }
 
   let handleChange = ev => {
     let target = ev->ReactEvent.Form.target
@@ -27,6 +34,15 @@ let make = (
     }
     None
   })
+
+  let focusClass = if inputFocused || value->Js.String2.length > 0 {
+    `mb-7 pb-1 pt-2 ${themeObj.fontSizeXs} transition-all ease-in duration-75`
+  } else {
+    "transition-all ease-in duration-75"
+  }
+
+  let floatinglabelClass = inputFocused ? "Label--floating" : "Label--resting"
+
   let cursorClass = !disabled ? "cursor-pointer" : "cursor-not-allowed"
   <RenderIf condition={options->Js.Array2.length > 0}>
     <div className="flex flex-col w-full">

@@ -16,11 +16,6 @@ let majorVersion = "v" + repoVersion.split(".")[0];
 let repoName = require("./package.json").name;
 let repoPublicPath = `/${repoVersion}/${majorVersion}`;
 
-let branchName = require("child_process")
-  .execSync("git rev-parse --abbrev-ref HEAD")
-  .toString()
-  .trim();
-
 const sdkEnv = process.env.sdkEnv;
 const envSdkUrl = process.env.envSdkUrl;
 const envBackendUrl = process.env.envBackendUrl;
@@ -73,6 +68,12 @@ let logEndpoint =
     ? "https://api.hyperswitch.io/sdk-logs"
     : "https://sandbox.juspay.io/godel/analytics";
 
+// Set this to true to enable logging
+let enableLogging = true;
+
+// Choose from DEBUG, INFO, WARNING, ERROR, SILENT
+let loggingLevel = "DEBUG";
+
 module.exports = (publicPath = "auto") => {
   let entries = {
     app: "./index.js",
@@ -120,6 +121,8 @@ module.exports = (publicPath = "auto") => {
         logEndpoint: JSON.stringify(logEndpoint),
         sentryDSN: JSON.stringify(process.env.SENTRY_DSN),
         sentryScriptUrl: JSON.stringify(process.env.SENTRY_SCRIPT_URL),
+        enableLogging: JSON.stringify(enableLogging),
+        loggingLevel: JSON.stringify(loggingLevel),
       }),
       new HtmlWebpackPlugin({
         inject: false,

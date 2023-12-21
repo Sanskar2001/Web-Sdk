@@ -16,8 +16,11 @@ let make = (~sessions, ~walletOptions, ~list: PaymentMethodsRecord.list) => {
   open SessionsType
   let dict = sessions->Utils.getDictFromJson
 
-  let sessionObj = itemToObjMapper(dict, Others)
-  let paypalToken = getPaymentSessionObj(sessionObj.sessionsToken, Paypal)
+  let sessionObj = React.useMemo1(() => itemToObjMapper(dict, Others), [dict])
+  let paypalToken = React.useMemo1(
+    () => getPaymentSessionObj(sessionObj.sessionsToken, Paypal),
+    [sessionObj],
+  )
   let gPayToken = getPaymentSessionObj(sessionObj.sessionsToken, Gpay)
   let applePaySessionObj = itemToObjMapper(dict, ApplePayObject)
   let applePayToken = getPaymentSessionObj(applePaySessionObj.sessionsToken, ApplePay)
@@ -46,9 +49,20 @@ let make = (~sessions, ~walletOptions, ~list: PaymentMethodsRecord.list) => {
                   switch googlePayThirdPartyToken {
                   | GooglePayThirdPartyTokenOptional(googlePayThirdPartyOptToken) =>
                     <GPayLazy
-                      sessionObj=optToken list thirdPartySessionObj=googlePayThirdPartyOptToken
+                      paymentType=NONE
+                      sessionObj=optToken
+                      list
+                      thirdPartySessionObj=googlePayThirdPartyOptToken
+                      walletOptions
                     />
-                  | _ => <GPayLazy sessionObj=optToken list thirdPartySessionObj=None />
+                  | _ =>
+                    <GPayLazy
+                      paymentType=NONE
+                      sessionObj=optToken
+                      list
+                      thirdPartySessionObj=None
+                      walletOptions
+                    />
                   }
                 | _ => React.null
                 }}

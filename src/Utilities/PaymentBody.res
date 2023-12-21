@@ -62,7 +62,7 @@ let savedCardBody = (~paymentToken, ~customerId, ~cvcNumber) => [
   ("card_cvc", cvcNumber->Js.Json.string),
 ]
 
-let mandateBody = () => {
+let mandateBody = paymentType => {
   [
     (
       "mandate_data",
@@ -92,6 +92,7 @@ let mandateBody = () => {
       ->Js.Json.object_,
     ),
     ("setup_future_usage", "off_session"->Js.Json.string),
+    ("payment_type", {paymentType === "" ? Js.Json.null : paymentType->Js.Json.string}),
   ]
 }
 
@@ -111,7 +112,6 @@ let achBankDebitBody = (
     ("payment_method", "bank_debit"->Js.Json.string),
     ("setup_future_usage", "off_session"->Js.Json.string),
     ("payment_method_type", "ach"->Js.Json.string),
-    ("payment_type", {paymentType === "" ? Js.Json.null : paymentType->Js.Json.string}),
     (
       "payment_method_data",
       [
@@ -159,7 +159,7 @@ let achBankDebitBody = (
       ->Js.Dict.fromArray
       ->Js.Json.object_,
     ),
-  ]->Js.Array2.concat(mandateBody())
+  ]->Js.Array2.concat(mandateBody(paymentType))
 
 let sepaBankDebitBody = (
   ~fullName,
@@ -1331,9 +1331,9 @@ let bizumBody = () => [
   ),
 ]
 
-let rewardBody = () => [
+let rewardBody = (~paymentMethodType) => [
   ("payment_method", "reward"->Js.Json.string),
-  ("payment_method_type", "classic"->Js.Json.string),
+  ("payment_method_type", paymentMethodType->Js.Json.string),
   ("payment_method_data", "reward"->Js.Json.string),
 ]
 
@@ -1460,6 +1460,31 @@ let cardRedirectBody = () => {
   ]
 }
 
+let openBankingUKBody = (~country) => {
+  [
+    ("payment_method", "bank_redirect"->Js.Json.string),
+    ("payment_method_type", "open_banking_uk"->Js.Json.string),
+    (
+      "payment_method_data",
+      [
+        (
+          "bank_redirect",
+          [
+            (
+              "open_banking_uk",
+              [("country", country->Js.Json.string)]->Js.Dict.fromArray->Js.Json.object_,
+            ),
+          ]
+          ->Js.Dict.fromArray
+          ->Js.Json.object_,
+        ),
+      ]
+      ->Js.Dict.fromArray
+      ->Js.Json.object_,
+    ),
+  ]
+}
+
 let getPaymentBody = (
   ~paymentMethod,
   ~fullName,
@@ -1519,8 +1544,10 @@ let getPaymentBody = (
   | "alma" => almaBody()
   | "atome" => atomeBody()
   | "multibanco" => multibancoBody(~email)
-  | "classic" => rewardBody()
+  | "classic" => rewardBody(~paymentMethodType=paymentMethod)
   | "card_redirect" => cardRedirectBody()
+  | "open_banking_uk" => openBankingUKBody(~country)
+  | "evoucher" => rewardBody(~paymentMethodType=paymentMethod)
   | _ => []
   }
 }

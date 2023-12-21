@@ -3,7 +3,7 @@ open RecoilAtomTypes
 @react.component
 let make = (
   ~setValue=?,
-  ~value,
+  ~value: RecoilAtomTypes.field,
   ~onChange,
   ~onBlur=?,
   ~rightIcon=React.null,
@@ -116,7 +116,7 @@ let make = (
         </AddDataAttributes>
         <RenderIf condition={config.appearance.labels == Floating}>
           <div
-            className={`Label ${floatinglabelClass} ${labelClass} absolute bottom-0 ml-3 ${focusClass} text-opacity-20`}
+            className={`Label ${floatinglabelClass} ${labelClass} absolute bottom-0 ml-3 ${focusClass}`}
             style={ReactDOMStyle.make(
               ~marginBottom={
                 inputFocused || value.value->Js.String2.length > 0 ? "" : themeObj.spacingUnit

@@ -215,15 +215,14 @@ let make = (
           ~handleUserError=false,
           (),
         )
-      } else if complete && !empty {
+      } else if areRequiredFieldsValid && complete && !empty {
         intent(
           ~bodyArr=savedCardBody
           ->Js.Dict.fromArray
           ->Js.Json.object_
           ->OrcaUtils.flattenObject(true)
           ->OrcaUtils.mergeTwoFlattenedJsonDicts(requiredFieldsBody)
-          ->OrcaUtils.getArrayOfTupleFromDict
-          ->Js.Array2.filter(((key, _)) => key !== "payment_method_data"),
+          ->OrcaUtils.getArrayOfTupleFromDict,
           ~confirmParam=confirm.confirmParams,
           ~handleUserError=false,
           (),

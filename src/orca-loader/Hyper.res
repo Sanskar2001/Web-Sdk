@@ -43,7 +43,6 @@ let preloadFile = (~type_, ~href=``, ()) => {
 }
 
 let preloader = () => {
-  preloadFile(~type_="document", ~href=`${ApiEndpoint.sdkDomainUrl}/`, ())
   preloadFile(~type_="script", ~href=`${ApiEndpoint.sdkDomainUrl}/app.js`, ())
   preloadFile(~type_="style", ~href=`${ApiEndpoint.sdkDomainUrl}/app.css`, ())
   preloadFile(~type_="image", ~href=`${ApiEndpoint.sdkDomainUrl}/icons/orca.svg`, ())
@@ -459,12 +458,12 @@ let make = (publishableKey, options: option<Js.Json.t>, analyticsInfo: option<Js
         Window.paymentRequest(methodData, details, optionsForPaymentRequest)
       }
       let returnObject = {
-        confirmPayment: confirmPayment,
-        elements: elements,
+        confirmPayment,
+        elements,
         widgets: elements,
         confirmCardPayment: confirmCardPaymentFn,
         retrievePaymentIntent: retrievePaymentIntentFn,
-        paymentRequest: paymentRequest,
+        paymentRequest,
       }
       Window.setHyper(Window.window, returnObject)
       returnObject

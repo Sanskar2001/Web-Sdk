@@ -1,13 +1,14 @@
 {
   "name": "orca-payment-page",
-  "version": "0.8.1",
+  "version": "0.16.2",
   "main": "index.js",
   "private": true,
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.414.0",
     "@aws-sdk/client-s3": "^3.417.0",
     "@kount/kount-web-client-sdk": "^1.1.6",
-    "@rescript/react": "^0.10.3",
+    "@rescript/react": "^0.11.0",
+    "@ryyppy/rescript-promise": "^2.1.0",
     "@sentry/react": "^7.64.0",
     "@sentry/webpack-plugin": "^2.7.0",
     "bs-fetch": "^0.6.2",
@@ -16,6 +17,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recoil": "^0.1.2",
+    "rescript-webapi": "^0.7.0",
     "webpack-merge": "^5.9.0"
   },
   "scripts": {
@@ -23,6 +25,7 @@
     "build:dev-integ": "sdkEnv=integ webpack --config webpack.dev.js",
     "start": "sdkEnv=local webpack --config webpack.dev.js && webpack serve --config webpack.dev.js",
     "build:prod": "sdkEnv=prod webpack --config webpack.common.js",
+    "build": "webpack --config webpack.common.js",
     "build:sandbox": "sdkEnv=sandbox webpack --config webpack.common.js",
     "build:integ": "sdkEnv=integ webpack --config webpack.common.js",
     "test": "react-scripts test",
@@ -79,7 +82,7 @@
     "postcss": "^8.4.16",
     "postcss-loader": "^7.0.1",
     "react-scripts": "5.0.1",
-    "rescript": "^9.1.4",
+    "rescript": "^10.1.4",
     "semantic-release": "^19.0.2",
     "tailwindcss": "^3.1.8",
     "terser-webpack-plugin": "^5.3.7",

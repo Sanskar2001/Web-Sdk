@@ -7,6 +7,8 @@
 @val external logEndpoint: string = "logEndpoint"
 @val external sentryDSN: string = "sentryDSN"
 @val external sentryScriptUrl: string = "sentryScriptUrl"
+@val external enableLogging: bool = "enableLogging"
+@val external loggingLevelStr: string = "loggingLevel"
 let targetOrigin: string = "*"
 let isInteg = sdkUrl === "https://dev.hyperswitch.io"
 let isSandbox = sdkUrl === "https://beta.hyperswitch.io"

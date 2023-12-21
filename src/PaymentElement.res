@@ -174,8 +174,15 @@ let make = (
     walletOptions->Js.Array2.includes("paypal") || isShowOrPayUsing
   }
   let dict = sessions->Utils.getDictFromJson
-  let klarnaSessionObj = SessionsType.itemToObjMapper(dict, Others)
-  let tokenObj = SessionsType.getPaymentSessionObj(klarnaSessionObj.sessionsToken, Klarna)
+  let sessionObj = SessionsType.itemToObjMapper(dict, Others)
+  let klarnaTokenObj = SessionsType.getPaymentSessionObj(sessionObj.sessionsToken, Klarna)
+  let gPayToken = SessionsType.getPaymentSessionObj(sessionObj.sessionsToken, Gpay)
+  let googlePayThirdPartySessionObj = SessionsType.itemToObjMapper(dict, GooglePayThirdPartyObject)
+  let googlePayThirdPartyToken = SessionsType.getPaymentSessionObj(
+    googlePayThirdPartySessionObj.sessionsToken,
+    Gpay,
+  )
+
   let loader = () => {
     Utils.handlePostMessageEvents(
       ~complete=false,
@@ -191,7 +198,7 @@ let make = (
       | Card => <CardPayment cardProps expiryProps cvcProps paymentType list />
       | Klarna =>
         <SessionPaymentWrapper type_=Others>
-          {switch tokenObj {
+          {switch klarnaTokenObj {
           | OtherTokenOptional(optToken) =>
             switch optToken {
             | Some(token) =>
@@ -222,7 +229,9 @@ let make = (
           <BacsBankTransferLazy paymentType list />
         </React.Suspense>
       | ACHBankDebit =>
-        <React.Suspense fallback={loader()}> <ACHBankDebitLazy paymentType list /> </React.Suspense>
+        <React.Suspense fallback={loader()}>
+          <ACHBankDebitLazy paymentType list />
+        </React.Suspense>
       | SepaBankDebit =>
         <React.Suspense fallback={loader()}>
           <SepaBankDebitLazy paymentType list />
@@ -237,6 +246,29 @@ let make = (
         <React.Suspense fallback={loader()}>
           <BecsBankDebitLazy paymentType list />
         </React.Suspense>
+      | GooglePay =>
+        switch gPayToken {
+        | OtherTokenOptional(optToken) =>
+          switch googlePayThirdPartyToken {
+          | GooglePayThirdPartyTokenOptional(googlePayThirdPartyOptToken) =>
+            <React.Suspense fallback={loader()}>
+              <GPayLazy
+                paymentType
+                sessionObj=optToken
+                list
+                thirdPartySessionObj=googlePayThirdPartyOptToken
+                walletOptions
+              />
+            </React.Suspense>
+          | _ =>
+            <React.Suspense fallback={loader()}>
+              <GPayLazy
+                paymentType sessionObj=optToken list thirdPartySessionObj=None walletOptions
+              />
+            </React.Suspense>
+          }
+        | _ => React.null
+        }
       | _ =>
         <React.Suspense fallback={loader()}>
           <PaymentMethodsWrapperLazy paymentType list paymentMethodName=selectedOption />
@@ -266,7 +298,9 @@ let make = (
         }}
       </div>
       <RenderIf condition={sdkHandleConfirmPayment}>
-        <div className="mt-4"> <PayNowButton /> </div>
+        <div className="mt-4">
+          <PayNowButton />
+        </div>
       </RenderIf>
       <PoweredBy />
     </RenderIf>
