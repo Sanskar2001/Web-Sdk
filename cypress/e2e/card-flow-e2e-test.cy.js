@@ -121,6 +121,6 @@ describe("Card payment flow test", () => {
     });
 
     cy.get("#submit").click();
-    cy.contains("Payment successful").should("be.visible");
+    cy.contains("Thanks for your order!").should("be.visible");
   });
 });

@@ -60,7 +60,7 @@ let make = (
     let value = target["value"]
     setValue(.prev => {
       ...prev,
-      value: value,
+      value,
       errorString: "",
     })
   }
@@ -89,20 +89,16 @@ let make = (
             style={ReactDOMStyle.make(
               ~background=disabled ? disbaledBG : themeObj.colorBackground,
               ~opacity=disabled ? "35%" : "",
-              ~padding=themeObj.spacingUnit,
+              ~padding="11px 20px 11px 11px",
               ~width="100%",
               (),
             )}
             name=""
             value=value.value
             disabled={readOnly || disabled}
+            onFocus={handleFocus}
             onChange=handleChange
             className={`Input ${inputClass} ${className} w-full appearance-none outline-none ${cursorClass}`}>
-            {defaultSelected
-              ? React.null
-              : <option value="" disabled={true} style={ReactDOMStyle.make(~opacity="70%", ())}>
-                  {React.string("Select")}
-                </option>}
             {options
             ->Js.Array2.mapi((item: string, i) => {
               <option key={string_of_int(i)} value=item> {React.string(item)} </option>
@@ -110,6 +106,36 @@ let make = (
             ->React.array}
           </select>
         </AddDataAttributes>
+        <RenderIf condition={config.appearance.labels == Floating}>
+          <div
+            className={`Label ${floatinglabelClass} ${labelClass} absolute bottom-0 ml-3 ${focusClass}`}
+            style={ReactDOMStyle.make(
+              ~marginBottom={
+                inputFocused || value.value->Js.String2.length > 0 ? "" : themeObj.spacingUnit
+              },
+              ~fontSize={
+                inputFocused || value.value->Js.String2.length > 0 ? themeObj.fontSizeXs : ""
+              },
+              (),
+            )}>
+            {React.string(fieldName)}
+          </div>
+        </RenderIf>
+        <RenderIf condition={config.appearance.labels == Floating}>
+          <div
+            className={`Label ${floatinglabelClass} absolute bottom-0 ml-3 ${focusClass}`}
+            style={ReactDOMStyle.make(
+              ~marginBottom={
+                inputFocused || value.value->Js.String2.length > 0 ? "" : themeObj.spacingUnit
+              },
+              ~fontSize={
+                inputFocused || value.value->Js.String2.length > 0 ? themeObj.fontSizeXs : ""
+              },
+              (),
+            )}>
+            {React.string(fieldName)}
+          </div>
+        </RenderIf>
         <div
           className="self-center absolute"
           style={ReactDOMStyle.make(
