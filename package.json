@@ -35,6 +35,7 @@
     "re:start": "rescript build -w",
     "start:dev": "npm run re:start & npm run start",
     "cypress": "cypress open",
+    "start:ultimate": "concurrently \"npm run re:start\" \"npm run start\" \"npm run start:playground\"",
     "start:playground": "npm run postinstall && cd Hyperswitch-React-Demo-App && node promptScript.js && npm run start --host",
     "build:playground": "npm run postinstall && cd Hyperswitch-React-Demo-App && node promptScript.js && npm run build",
     "prepare": "husky install",
