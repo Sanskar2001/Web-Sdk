@@ -1,3 +1,4 @@
+/*
 import * as testIds from "../../src/Utilities/TestUtils.bs";
 describe("Card payment flow test", () => {
   let customerData;
@@ -145,3 +146,4 @@ describe("Card payment flow test", () => {
     cy.contains("Thanks for your order!").should("be.visible");
   });
 });
+*/

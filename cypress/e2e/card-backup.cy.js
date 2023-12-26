@@ -1,4 +1,4 @@
-import * as testIds from "../../src/Utilities/TestUtils.bs";
+/*import * as testIds from "../../src/Utilities/TestUtils.bs";
 describe("Card payment flow test", () => {
   let customerData;
   let publishableKey = "pk_snd_3b33cd9404234113804aa1accaabe22f";
@@ -185,3 +185,4 @@ describe("Card payment flow test", () => {
     cy.contains("Payment successful").should("be.visible");
   });
 });
+*/

@@ -35,6 +35,7 @@
     "re:start": "rescript build -w",
     "start:dev": "npm run re:start & npm run start",
     "cypress": "cypress open",
+    "cypress:ci":"npx cypress run --record --key 698b8766-019d-4271-9316-504287f50eaa",
     "start:ultimate": "concurrently \"npm run re:start\" \"npm run start\" \"npm run start:playground\"",
     "start:playground": "npm run postinstall && cd Hyperswitch-React-Demo-App && node promptScript.js && npm run start --host",
     "build:playground": "npm run postinstall && cd Hyperswitch-React-Demo-App && node promptScript.js && npm run build",
