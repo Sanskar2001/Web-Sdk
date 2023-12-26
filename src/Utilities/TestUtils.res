@@ -11,6 +11,7 @@ let cityInputTestId = "city"
 let countryDropDownTestId = "Country"
 let stateDropDownTestId = "State"
 let postalCodeInputTestId = "postal"
+let addNewCardIcon = "addNewCard"
 
 /*
 {

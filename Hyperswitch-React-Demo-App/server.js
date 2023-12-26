@@ -44,11 +44,86 @@ app.get("/urls", (req, res) => {
 app.get("/create-payment-intent", async (req, res) => {
   try {
     var paymentIntent;
+    const request22 = {
+      currency: "USD",
+      amount: 2999,
+      order_details: [
+        {
+          product_name: "Apple iphone 15",
+          quantity: 1,
+          amount: 2999,
+        },
+      ],
+      currency: "USD",
+      confirm: false,
+      capture_method: "automatic",
+      authentication_type: "three_ds",
+      // customer_id: "hyperswitch_sdk_demo_id",
+      email: "hyperswitch_sdk_demo_id@gmail.com",
+      description: "Hello this is description",
+      // allowed_payment_method_types:["sofort"],
+      shipping: {
+        address: {
+          state: "zsaasdas",
+          city: "Banglore",
+          country: "US",
+          line1: "sdsdfsdf",
+          line2: "hsgdbhd",
+          line3: "alsksoe",
+          zip: "571201",
+          first_name: "joseph",
+          last_name: "doe",
+        },
+        phone: {
+          number: "123456789",
+          country_code: "+1",
+        },
+      },
+      connector_metadata: {
+        noon: {
+          order_category: "applepay",
+        },
+      },
+      metadata: {
+        udf1: "value1",
+        new_customer: "true",
+        login_date: "2019-09-10T10:11:12Z",
+      },
+      billing: {
+        address: {
+          line1: "1467",
+          line2: "Harrison Street",
+          line3: "Harrison Street",
+          city: "San Fransico",
+          state: "California",
+          zip: "94122",
+          country: "US",
+          first_name: "joseph",
+          last_name: "Doe",
+        },
+        phone: {
+          number: "8056594427",
+          country_code: "+91",
+        },
+      },
+    };
     const request = {
       currency: "USD",
       amount: 6500,
       authentication_type: "no_three_ds",
-      // customer_id: "hyperswitch_sdk_demo_id",
+      description: "Joseph First Crypto",
+      // email: "hyperswitch_sdk_demo_id@gmail.com",
+      connector_metadata: {
+        noon: {
+          order_category: "applepay",
+        },
+      },
+      metadata: {
+        udf1: "value1",
+        new_customer: "true",
+        login_date: "2019-09-10T10:11:12Z",
+      },
+      customer_id: "hyperswitch_sdk_demo_id",
       // mandate_data: {
       //   customer_acceptance: null,
       //   mandate_type: {

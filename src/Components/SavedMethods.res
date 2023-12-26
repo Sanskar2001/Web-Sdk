@@ -25,6 +25,7 @@ let make = (
         ""->CardTheme.getPaymentMode,
       )
       let isActive = token == obj.paymentToken
+
       <SavedCardItem
         key={i->Belt.Int.toString}
         setPaymentToken
@@ -73,26 +74,35 @@ let make = (
       }}
       <RenderIf condition={list.payment_methods->Js.Array.length !== 0}>
         <DynamicFields
-          paymentType list paymentMethod="card" paymentMethodType="debit" setRequiredFieldsBody isSavedCardFlow=true savedCards=savedMethods
+          paymentType
+          list
+          paymentMethod="card"
+          paymentMethodType="debit"
+          setRequiredFieldsBody
+          isSavedCardFlow=true
+          savedCards=savedMethods
         />
       </RenderIf>
       <RenderIf condition={!showFeilds}>
-        <div
-          className="Label flex flex-row gap-3 items-end cursor-pointer"
-          style={ReactDOMStyle.make(
-            ~fontSize="14px",
-            ~float="left",
-            ~marginTop="14px",
-            ~fontWeight="500",
-            ~width="fit-content",
-            ~color=themeObj.colorPrimary,
-            (),
-          )}
-          onClick={_ => {
-            setShowFeilds(._ => true)
-          }}>
-          <Icon name="circle-plus" size=22 /> {React.string(localeString.addNewCard)}
-        </div>
+        <AddDataAttributes attributes=[("data-testid", TestUtils.addNewCardIcon)]>
+          <div
+            className="Label flex flex-row gap-3 items-end cursor-pointer"
+            style={ReactDOMStyle.make(
+              ~fontSize="14px",
+              ~float="left",
+              ~marginTop="14px",
+              ~fontWeight="500",
+              ~width="fit-content",
+              ~color=themeObj.colorPrimary,
+              (),
+            )}
+            onClick={_ => {
+              setShowFeilds(._ => true)
+            }}>
+            <Icon name="circle-plus" size=22 />
+            {React.string(localeString.addNewCard)}
+          </div>
+        </AddDataAttributes>
       </RenderIf>
     </div>
   </>

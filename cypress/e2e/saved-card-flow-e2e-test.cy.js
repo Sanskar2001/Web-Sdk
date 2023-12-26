@@ -34,14 +34,13 @@ describe("Card payment flow test", () => {
     // cy.frameLoaded(iframeSelector);
     // cy.wait(1000);
 
-    cy.visit("http://localhost:9060");
-    // cy.wait(1000);
+    cy.wait(1000);
     // cy.frameLoaded(iframeSelector);
 
-    cy.iframe(iframeSelector)
-      .find(`[data-testid=${testIds.addNewCardIcon}]`)
-      .should("be.visible")
-      .click();
+    // cy.iframe(iframeSelector)
+    //   .find(`[data-testid=${testIds.addNewCardIcon}]`)
+    //   .should("be.visible")
+    //   .click();
 
     const mapping = {
       [testIds.cardNoInputTestId]: customerData.cardNo,
@@ -92,6 +91,8 @@ describe("Card payment flow test", () => {
           idArr.push(testIds.fieldTestIdMapping[key]);
         }
 
+        let stringsToRemove = ["expiryInput", "cardNoInput", "email"];
+        idArr = idArr.filter((item) => !stringsToRemove.includes(item));
         const countryIndex = idArr.indexOf("Country");
         const stateIndex = idArr.indexOf("State");
 
@@ -109,20 +110,19 @@ describe("Card payment flow test", () => {
 
         expect(response.status).to.eq(200);
 
-        let stringsToRemove = ["email"];
-        idArr = idArr.filter((item) => !stringsToRemove.includes(item));
-
         idArr.forEach((ele) => {
-          cy.iframe(iframeSelector)
-            .find(`[data-testid=${ele}]`)
-            .should("be.visible")
-            .type(mapping[ele], { force: true });
-
           if (ele === "Country" || ele === "State") {
+            console.error("selecting " + ele + " " + mapping[ele]);
             cy.iframe(iframeSelector)
               .find(`[data-testid=${ele}]`)
               .should("be.visible")
               .select(mapping[ele]);
+          } else {
+            console.warn("filling " + ele + " " + mapping[ele]);
+            cy.iframe(iframeSelector)
+              .find(`[data-testid=${ele}]`)
+              .should("be.visible")
+              .type(mapping[ele], { force: true });
           }
         });
       });

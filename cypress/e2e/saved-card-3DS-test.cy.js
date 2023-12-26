@@ -38,10 +38,17 @@ describe("Card payment flow test", () => {
     // cy.wait(1000);
     // cy.frameLoaded(iframeSelector);
 
+    // cy.iframe(iframeSelector)
+    //   .find(`[data-testid=${testIds.addNewCardIcon}]`)
+    //   .should("be.visible")
+    //   .click();
+
     cy.iframe(iframeSelector)
-      .find(`[data-testid=${testIds.addNewCardIcon}]`)
+      .find(`[data-testid=card-1]`)
       .should("be.visible")
       .click();
+
+    // cy.wait(5000);
 
     const mapping = {
       [testIds.cardNoInputTestId]: customerData.cardNo,
@@ -92,6 +99,8 @@ describe("Card payment flow test", () => {
           idArr.push(testIds.fieldTestIdMapping[key]);
         }
 
+        let stringsToRemove = ["expiryInput", "cardNoInput", "email"];
+        idArr = idArr.filter((item) => !stringsToRemove.includes(item));
         const countryIndex = idArr.indexOf("Country");
         const stateIndex = idArr.indexOf("State");
 
@@ -108,9 +117,6 @@ describe("Card payment flow test", () => {
         console.warn(idArr);
 
         expect(response.status).to.eq(200);
-
-        let stringsToRemove = ["email"];
-        idArr = idArr.filter((item) => !stringsToRemove.includes(item));
 
         idArr.forEach((ele) => {
           cy.iframe(iframeSelector)
@@ -129,6 +135,13 @@ describe("Card payment flow test", () => {
     });
 
     cy.get("#submit").click();
+    // cy.url().should("include", "sandbox.hyperswitch");
+
+    cy.iframe(`#challengeFrame`)
+      .find(`id=test-source-authorize-3ds`)
+      .should("be.visible")
+      .click();
+    cy.wait(20000);
     cy.contains("Thanks for your order!").should("be.visible");
   });
 });
