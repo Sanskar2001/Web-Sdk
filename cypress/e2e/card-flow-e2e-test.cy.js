@@ -35,8 +35,9 @@ describe("Card payment flow test", () => {
     // cy.wait(1000);
 
     cy.visit("http://localhost:9060");
-    // cy.wait(1000);
-    // cy.frameLoaded(iframeSelector);
+
+    cy.frameLoaded(iframeSelector);
+    cy.wait(4000);
 
     cy.iframe(iframeSelector)
       .find(`[data-testid=${testIds.addNewCardIcon}]`)
