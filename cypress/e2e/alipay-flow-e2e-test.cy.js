@@ -36,9 +36,8 @@ describe("Ali Pay payment flow test", () => {
   it("ali pay payment flow successful", () => {
     let iframeSelector =
       "#orca-payment-element-iframeRef-orca-elements-payment-element-payment-element";
-    cy.wait(4000);
     cy.frameLoaded(iframeSelector);
-
+    cy.wait(2000);
     cy.iframe(iframeSelector)
       .find(`[data-testid=${testIds.paymentMethodDropDownTestId}]`)
       .should("be.visible")
