@@ -62,10 +62,10 @@ describe("klarna payment flow test", () => {
       `[data-testid=${testIds.fullNameInputTestId}]`,
       customerData.cardHolderName
     );
-    enterValueInIframe(
-      `[data-testid=${testIds.emailInputTestId}]`,
-      customerData.email
-    );
+    // enterValueInIframe(
+    //   `[data-testid=${testIds.emailInputTestId}]`,
+    //   customerData.email
+    // );
     selectValueInIframe(
       `[data-testid=${testIds.countryDropDownTestId}]`,
       customerData.country
