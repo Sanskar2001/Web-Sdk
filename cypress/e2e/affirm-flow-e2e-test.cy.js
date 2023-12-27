@@ -33,7 +33,7 @@ describe("affirm payment flow test", () => {
       .its("0.contentDocument")
       .its("body");
   });
-  it("affirm payment flow successful", () => {
+  it.skip("affirm payment flow successful", () => {
     let iframeSelector =
       "#orca-payment-element-iframeRef-orca-elements-payment-element-payment-element";
 

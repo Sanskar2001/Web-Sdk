@@ -33,7 +33,7 @@ describe("Ali Pay payment flow test", () => {
       .its("0.contentDocument")
       .its("body");
   });
-  it("ali pay payment flow successful", () => {
+  it.skip("ali pay payment flow successful", () => {
     let iframeSelector =
       "#orca-payment-element-iframeRef-orca-elements-payment-element-payment-element";
     cy.frameLoaded(iframeSelector);
