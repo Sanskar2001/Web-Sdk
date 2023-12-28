@@ -1,4 +1,3 @@
-import * as testIds from "../../src/Utilities/TestUtils.bs";
 describe("Card payment flow test", () => {
   let customerData;
   let publishableKey = "pk_snd_3b33cd9404234113804aa1accaabe22f";
@@ -42,91 +41,8 @@ describe("Card payment flow test", () => {
     //   .should("be.visible")
     //   .click();
 
-    const mapping = {
-      [testIds.cardNoInputTestId]: customerData.cardNo,
-      [testIds.expiryInputTestId]: customerData.cardExpiry,
-      [testIds.cardCVVInputTestId]: customerData.cardCVV,
-      [testIds.fullNameInputTestId]: customerData.cardHolderName,
-      [testIds.cardHolderNameInputTestId]: customerData.cardHolderName,
-      [testIds.emailInputTestId]: customerData.email,
-      [testIds.addressLine1InputTestId]: customerData.address,
-      [testIds.cityInputTestId]: customerData.city,
-      [testIds.countryDropDownTestId]: customerData.country,
-      [testIds.stateDropDownTestId]: customerData.state,
-      [testIds.postalCodeInputTestId]: customerData.postalCode,
-    };
-
-    let clientSecret;
-    cy.request({
-      method: "GET",
-      url: "http://localhost:5252/create-payment-intent",
-    }).then((response) => {
-      clientSecret = response.body.clientSecret;
-
-      cy.request({
-        method: "GET",
-        url: `https://sandbox.hyperswitch.io/account/payment_methods?client_secret=${clientSecret}`,
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": publishableKey,
-        }, // Replace with your API endpoint
-      }).then((response) => {
-        // Check the response status
-        console.warn(response.body.payment_methods);
-
-        let paymentMethods = response.body.payment_methods;
-
-        const foundElement = paymentMethods.find(
-          (element) => element.payment_method === "card"
-        );
-
-        const ele = foundElement.payment_method_types.find(
-          (element) => element.payment_method_type === "debit"
-        );
-        console.log(ele.required_fields);
-
-        let requiredFieldsArr = ele.required_fields;
-        let idArr = [];
-        for (const key in requiredFieldsArr) {
-          idArr.push(testIds.fieldTestIdMapping[key]);
-        }
-
-        let stringsToRemove = ["expiryInput", "cardNoInput", "email"];
-        idArr = idArr.filter((item) => !stringsToRemove.includes(item));
-        const countryIndex = idArr.indexOf("Country");
-        const stateIndex = idArr.indexOf("State");
-
-        // Move "State" after "Country"
-        if (
-          countryIndex !== -1 &&
-          stateIndex !== -1 &&
-          stateIndex < countryIndex
-        ) {
-          idArr.splice(stateIndex, 1);
-          idArr.splice(countryIndex, 0, "State");
-        }
-
-        console.warn(idArr);
-
-        expect(response.status).to.eq(200);
-
-        idArr.forEach((ele) => {
-          if (ele === "Country" || ele === "State") {
-            console.error("selecting " + ele + " " + mapping[ele]);
-            cy.iframe(iframeSelector)
-              .find(`[data-testid=${ele}]`)
-              .should("be.visible")
-              .select(mapping[ele]);
-          } else {
-            console.warn("filling " + ele + " " + mapping[ele]);
-            cy.iframe(iframeSelector)
-              .find(`[data-testid=${ele}]`)
-              .should("be.visible")
-              .type(mapping[ele], { force: true });
-          }
-        });
-      });
-    });
+    //["expiryInput", "cardNoInput", "email"]
+    cy.testDynamicFields(customerData, ["expiryInput", "cardNoInput", "email"]);
 
     cy.get("#submit").click();
     cy.contains("Thanks for your order!").should("be.visible");
