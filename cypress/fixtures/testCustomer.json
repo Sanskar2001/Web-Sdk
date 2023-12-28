@@ -9,7 +9,7 @@
   "address":"123 Main Street Apt 4B",
   "city":"New York",
   "country":"United States",
-  "state":"New York",
-  "postalCode":"1",
+  "state":"xxx",
+  "postalCode":"10001",
   "paymentSuccessfulText":"Payment successful"
 }
