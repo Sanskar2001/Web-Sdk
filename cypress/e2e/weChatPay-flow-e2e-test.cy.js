@@ -33,7 +33,7 @@ describe("We Chat payment flow test", () => {
       .its("0.contentDocument")
       .its("body");
   });
-  it.skip("WeChat pay payment flow successful", () => {
+  it("WeChat pay payment flow successful", () => {
     let iframeSelector =
       "#orca-payment-element-iframeRef-orca-elements-payment-element-payment-element";
 
