@@ -123,7 +123,7 @@ app.get("/create-payment-intent", async (req, res) => {
         new_customer: "true",
         login_date: "2019-09-10T10:11:12Z",
       },
-      customer_id: "hyperswitch_sdk_demo_id",
+      customer_id: "hyperswitch_sdk_demo_test_id",
       // mandate_data: {
       //   customer_acceptance: null,
       //   mandate_type: {
