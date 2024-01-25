@@ -29,6 +29,8 @@ import * as testIds from "../../src/Utilities/TestUtils.bs";
 let iframeSelector =
   "#orca-payment-element-iframeRef-orca-elements-payment-element-payment-element";
 
+let globalState = {};
+
 Cypress.Commands.add("enterValueInIframe", (selector, value) => {
   cy.iframe(iframeSelector)
     .find(`[data-testid=${selector}]`)
@@ -53,7 +55,7 @@ Cypress.Commands.add("hardReload", () => {
 
 Cypress.Commands.add(
   "testDynamicFields",
-  (customerData, testIdsToRemoveArr = []) => {
+  (customerData, testIdsToRemoveArr = [], isThreeDSEnabled = false) => {
     const mapping = {
       [testIds.cardNoInputTestId]: customerData.cardNo,
       [testIds.expiryInputTestId]: customerData.cardExpiry,
@@ -67,6 +69,9 @@ Cypress.Commands.add(
       [testIds.stateDropDownTestId]: customerData.state,
       [testIds.postalCodeInputTestId]: customerData.postalCode,
     };
+    if (isThreeDSEnabled) {
+      mapping[testIds.cardNoInputTestId] = customerData.threeDSCardNo;
+    }
     let publishableKey = "pk_snd_3b33cd9404234113804aa1accaabe22f";
     let clientSecret;
     cy.request({
@@ -139,3 +144,50 @@ Cypress.Commands.add(
     });
   }
 );
+
+const request = {
+  currency: "USD",
+  amount: 6500,
+  authentication_type: "three_ds",
+  description: "Joseph First Crypto",
+  email: "hyperswitch_sdk_demo_id@gmail.com",
+  connector_metadata: {
+    noon: {
+      order_category: "applepay",
+    },
+  },
+  metadata: {
+    udf1: "value1",
+    new_customer: "true",
+    login_date: "2019-09-10T10:11:12Z",
+  },
+  //   customer_id: "hyperswitch_sdk_demo_test_id",
+  business_country: "US",
+  business_label: "default",
+};
+Cypress.Commands.add("createPaymentIntent", () => {
+  return cy
+    .request({
+      method: "POST",
+      url: "https://sandbox.hyperswitch.io/payments",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "api-key": "snd_c691ade6995743bd88c166ba509ff5da",
+      },
+      body: JSON.stringify(request),
+    })
+    .then((response) => {
+      expect(response.headers["content-type"]).to.include("application/json");
+      expect(response.body).to.have.property("client_secret");
+      const clientSecret = response.body.client_secret;
+      cy.log(clientSecret);
+      cy.log(response);
+
+      globalState["clientSecret"] = clientSecret;
+    });
+});
+
+Cypress.Commands.add("getGlobalState", (key) => {
+  return globalState[key];
+});
