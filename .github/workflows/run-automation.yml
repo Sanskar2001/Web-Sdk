@@ -47,10 +47,7 @@ jobs:
         # Creates a .env file with environment variables needed for the application
 
       - name: Build and start local server
-        run: |
-          npm run re:build && npm start &
-          echo "Hyperswitch Web started" && cd Hyperswitch-React-Demo-App && npm start &
-          echo "Demo App started"
+        run: npm run start:ultimate
         # Builds the project and starts both the Hyperswitch Web and Demo App servers in the background
 
       - name: Run Cypress
