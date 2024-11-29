@@ -10,7 +10,7 @@
 <br/><br/>
 Web unified checkout SDK is an inclusive, consistent and blended payment experience optimized for the best conversion rates.
 <br/><br/>
-<strong>Inclusive</strong>: A variety of global payment methods including cards, buy now pay later and digital wallets are supported by the Unified Checkout, with adaptation to local preferences and ability to local language customization.
+<strong>Inclusive</strong>: A variety of global payment methods including cards, buy now pay later and digital wallets are supported by the Unified Checkout, with adaptation to local preferences and ability to local language customizations.
 
 <strong>Consistent</strong>: With a diverse set of payment methods supported, the Unified Checkout provides a singular consistent payment experience across platforms (web, android and ios) powered by smart payment forms, minimal redirections and intelligent retries.
 
