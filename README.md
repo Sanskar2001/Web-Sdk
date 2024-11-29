@@ -6,7 +6,7 @@
 <h1 align="center">Hyperswitch Unified Checkout</h1>
 
 <div align="center" >
-<i>Accept payments from around the globe with a secure, Unified Checkout that gives your customers the best in class payment experience</i>
+<i>Accept payments from around the globe with a secure, Unified Checkout that gives your customers the best in class payment experiences</i>
 <br/><br/>
 Web unified checkout SDK is an inclusive, consistent and blended payment experience optimized for the best conversion rates.
 <br/><br/>
