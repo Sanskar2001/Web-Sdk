@@ -3,7 +3,7 @@
   <img src="./docs/imgs/hyperswitch-logo-light.svg#gh-light-mode-only" alt="Hyperswitch-Logo" width="40%" />
 </p>
 
-<h1 align="center">Hyperswitch Unified Checkout</h1>
+<h1 align="center">Hyperswitch Unified Checkouts</h1>
 
 <div align="center" >
 <i>Accept payments from around the globe with a secure, Unified Checkout that gives your customers the best in class payment experience</i>
